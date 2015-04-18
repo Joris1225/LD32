@@ -10,6 +10,7 @@ public class ManipulatableBlock : MonoBehaviour
     private float heat = 0f;
     private Material mat;
     private Rigidbody rb;
+    private ParticleSystem steam;
 
     void Awake()
     {
@@ -17,6 +18,8 @@ public class ManipulatableBlock : MonoBehaviour
         mat = r.material;
 
         rb = GetComponent<Rigidbody>();
+
+        steam = GetComponentInChildren<ParticleSystem>();
     }
 
 	void Start() 
@@ -43,5 +46,14 @@ public class ManipulatableBlock : MonoBehaviour
     {
         Vector3 force = pce.velocity * airForce;
         rb.AddForce(force);
+    }
+
+    public void OnWater()
+    {
+        if (heat >= 0.8f && !steam.isPlaying)
+        {
+            steam.Play();
+        }
+        heat = Mathf.Clamp(heat - coolPace * 8, 0f, 1f);
     }
 }

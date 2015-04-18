@@ -174,10 +174,20 @@ public class PlayerScript : MonoBehaviour
             partSystem = fire;
             currentElement = Element.Fire;
         }
-        if (Input.GetKeyUp(KeyCode.Alpha2))
+        else if (Input.GetKeyUp(KeyCode.Alpha2))
         {
             partSystem = air;
             currentElement = Element.Air;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            partSystem = water;
+            currentElement = Element.Water;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            partSystem = earth;
+            currentElement = Element.Earth;
         }
     }
 
@@ -205,6 +215,9 @@ public class PlayerScript : MonoBehaviour
                     {
                         other.SendMessage("OnAir", collisionEvents[i]);
                     }
+                    break;
+                case Element.Water:
+                    other.SendMessage("OnWater");
                     break;
             }
         }
