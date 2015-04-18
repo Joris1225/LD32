@@ -11,7 +11,7 @@ public class BalloonScript : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 	
-	public void OnHeat()
+	public void Ascend()
     {
         rb.AddForce(Vector3.up * liftSpeed);
     }

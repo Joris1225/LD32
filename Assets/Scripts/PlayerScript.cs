@@ -263,6 +263,12 @@ public class PlayerScript : MonoBehaviour
                     break;
             }
         }
-        
+        else if(other.CompareTag("Balloon"))
+        {
+            if(currentElement == Element.Air || currentElement == Element.Fire)
+            {
+                other.SendMessage("Ascend");
+            }
+        }
     }
 }
