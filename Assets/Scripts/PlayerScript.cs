@@ -18,6 +18,8 @@ public class PlayerScript : MonoBehaviour
     private ParticleSystem fire;
     private ParticleSystem water;
 
+    private RectTransform selectedBox;
+
     public bool escapeToggled = false;
 
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -63,6 +65,8 @@ public class PlayerScript : MonoBehaviour
         }
         partSystem = fire;
         currentElement = Element.Fire;
+
+        selectedBox = GameObject.Find("Selected").GetComponent<RectTransform>();
     }
 
 	void Start() 
@@ -89,21 +93,25 @@ public class PlayerScript : MonoBehaviour
         {
             partSystem = fire;
             currentElement = Element.Fire;
+            selectedBox.localPosition = new Vector3(-375f, 0f, 0f);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha2))
         {
-            partSystem = air;
-            currentElement = Element.Air;
+            partSystem = water;
+            currentElement = Element.Water;
+            selectedBox.localPosition = new Vector3(-125f, 0f, 0f);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha3))
         {
-            partSystem = water;
-            currentElement = Element.Water;
+            partSystem = air;
+            currentElement = Element.Air;
+            selectedBox.localPosition = new Vector3(125f, 0f, 0f);
         }
         else if (Input.GetKeyUp(KeyCode.Alpha4))
         {
             partSystem = null;
             currentElement = Element.Earth;
+            selectedBox.localPosition = new Vector3(375f, 0f, 0f);
         }
 
         Fire();
