@@ -17,12 +17,14 @@ public class PlayerScript : MonoBehaviour
     public float maximumY = 60f;
 
     private float rotationY = 0f;
+    private float moveSpeed = 2f;
 
     private CharacterMotor motor;
 
     void Awake()
     {
         motor = GetComponent<CharacterMotor>();
+        
     }
 
 	void Start() 
@@ -96,7 +98,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         // Apply the direction to the CharacterMotor
-        motor.inputMoveDirection = transform.rotation * directionVector;
+        motor.inputMoveDirection = transform.rotation * directionVector * moveSpeed;
         motor.inputJump = Input.GetButton("Jump");
     }
 
