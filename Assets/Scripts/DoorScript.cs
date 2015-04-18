@@ -42,6 +42,5 @@ public class DoorScript : MonoBehaviour
             shouldOpen = true;
             goalPosition = transform.position.y + deltaY;
         }
-        
     }
 }

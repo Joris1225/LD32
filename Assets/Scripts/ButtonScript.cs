@@ -3,11 +3,11 @@ using System.Collections;
 
 public class ButtonScript : MonoBehaviour 
 {
-
-    public GameObject door;
+    public string message;
+    public GameObject receiver;
 
     void OnTriggerEnter(Collider other)
     {
-        door.SendMessage("Open");
+        receiver.SendMessage(message);
     }
 }
