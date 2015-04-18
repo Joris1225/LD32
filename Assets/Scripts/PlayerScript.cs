@@ -119,7 +119,7 @@ public class PlayerScript : MonoBehaviour
 
         if(Input.GetKeyUp(KeyCode.R))
         {
-            Application.LoadLevel(0);
+            Application.LoadLevel(Application.loadedLevel);
         }
 	}
 
