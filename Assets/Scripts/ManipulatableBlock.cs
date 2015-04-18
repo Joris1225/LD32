@@ -76,4 +76,12 @@ public class ManipulatableBlock : MonoBehaviour
         rb.AddForce(Vector3.up * earthForce, ForceMode.Impulse);
         earthParticles.Play();
     }
+
+    public void OnParticleCollision(GameObject other)
+    {
+        if (other.CompareTag("Mill"))
+        {
+            other.SendMessage("OnSteam");
+        }
+    }
 }

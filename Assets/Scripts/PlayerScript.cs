@@ -192,8 +192,8 @@ public class PlayerScript : MonoBehaviour
             switch (currentElement)
             {
                 case Element.Water:
-                        if(!partSystem.isPlaying)
-                            partSystem.Play();
+                    if(!partSystem.isPlaying)
+                        partSystem.Play();
                     break;
                 case Element.Fire:
                     if (!partSystem.isPlaying)
@@ -203,7 +203,8 @@ public class PlayerScript : MonoBehaviour
                     if(currentAirCooldown == 0f)
                     {
                         currentAirCooldown = airCooldown;
-                        partSystem.Play();
+                        if (!partSystem.isPlaying)
+                            partSystem.Play();
                     }
                     break;
                 case Element.Earth:
