@@ -34,6 +34,8 @@ public class PlayerScript : MonoBehaviour
 
     private float rotationY = 0f;
     private float moveSpeed = 2f;
+    private float airCooldown = 1f;
+    private float currentAirCooldown = 0f;
 
     private CharacterMotor motor;
 
@@ -81,6 +83,7 @@ public class PlayerScript : MonoBehaviour
         Move();
 
         Fire();
+        currentAirCooldown = Mathf.Clamp(currentAirCooldown - Time.deltaTime, 0f, airCooldown);
 	}
 	
 
@@ -188,6 +191,10 @@ public class PlayerScript : MonoBehaviour
                     other.SendMessage("OnHeat");
                     break;
                 case Element.Air:
+                    if (currentAirCooldown > 0)
+                        break;
+
+                    currentAirCooldown = airCooldown;
                     ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
                     int safeLength = partSystem.GetSafeCollisionEventSize();
                     if (collisionEvents.Length < safeLength)
