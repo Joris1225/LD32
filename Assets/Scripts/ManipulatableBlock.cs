@@ -64,7 +64,7 @@ public class ManipulatableBlock : MonoBehaviour
 
     public void OnWater()
     {
-        if (heat >= 0.8f && !steam.isPlaying)
+        if (heat >= 0.6f && !steam.isPlaying)
         {
             steam.Play();
         }

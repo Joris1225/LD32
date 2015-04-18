@@ -5,6 +5,7 @@ public class DoorScript : MonoBehaviour
 {
 
     public float openTime = 10f;
+    public float deltaY = 6f;
 
     private bool shouldOpen = false;
     private Rigidbody rb;
@@ -40,7 +41,7 @@ public class DoorScript : MonoBehaviour
         if(!shouldOpen)
         {
             shouldOpen = true;
-            goalPosition = transform.position.y + 6f;
+            goalPosition = transform.position.y + deltaY;
         }
         
     }
