@@ -185,11 +185,9 @@ public class PlayerScript : MonoBehaviour
             switch(currentElement)
             {
                 case Element.Fire:
-                    Debug.Log("fire");
                     other.SendMessage("OnHeat");
                     break;
                 case Element.Air:
-                    Debug.Log("air");
                     ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
                     int safeLength = partSystem.GetSafeCollisionEventSize();
                     if (collisionEvents.Length < safeLength)
