@@ -6,6 +6,7 @@ public class ManipulatableBlock : MonoBehaviour
     public float heatPace = 0.01f;
     public float coolPace = 0.05f;
     public float airForce = 1f;
+    public float earthForce = 10f;
 
     private float heat = 0f;
     private Material mat;
@@ -55,5 +56,10 @@ public class ManipulatableBlock : MonoBehaviour
             steam.Play();
         }
         heat = Mathf.Clamp(heat - coolPace * 8, 0f, 1f);
+    }
+
+    public void OnEarth()
+    {
+        rb.AddForce(Vector3.up * earthForce, ForceMode.Impulse);
     }
 }

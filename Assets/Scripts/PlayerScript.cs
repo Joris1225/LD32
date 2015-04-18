@@ -16,7 +16,6 @@ public class PlayerScript : MonoBehaviour
 
     private ParticleSystem air;
     private ParticleSystem fire;
-    private ParticleSystem earth;
     private ParticleSystem water;
 
     public bool escapeToggled = false;
@@ -34,8 +33,12 @@ public class PlayerScript : MonoBehaviour
 
     private float rotationY = 0f;
     private float moveSpeed = 2f;
+
     private float airCooldown = 1f;
     private float currentAirCooldown = 0f;
+
+    private float earthCooldown = 2f;
+    private float currentEarthCooldown = 0f;
 
     private CharacterMotor motor;
 
@@ -49,9 +52,6 @@ public class PlayerScript : MonoBehaviour
             {
                 case "Air":
                     air = child.GetComponent<ParticleSystem>();
-                    break;
-                case "Earth":
-                    earth = child.GetComponent<ParticleSystem>();
                     break;
                 case "Fire":
                     fire = child.GetComponent<ParticleSystem>();
@@ -82,10 +82,32 @@ public class PlayerScript : MonoBehaviour
 
         Move();
 
-        Fire();
         currentAirCooldown = Mathf.Clamp(currentAirCooldown - Time.deltaTime, 0f, airCooldown);
+        currentEarthCooldown = Mathf.Clamp(currentEarthCooldown - Time.deltaTime, 0f, earthCooldown);
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            partSystem = fire;
+            currentElement = Element.Fire;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            partSystem = air;
+            currentElement = Element.Air;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha3))
+        {
+            partSystem = water;
+            currentElement = Element.Water;
+        }
+        else if (Input.GetKeyUp(KeyCode.Alpha4))
+        {
+            partSystem = null;
+            currentElement = Element.Earth;
+        }
+
+        Fire();
 	}
-	
 
     private void LookAround()
     {
@@ -159,35 +181,44 @@ public class PlayerScript : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            if (!partSystem.isPlaying)
-                partSystem.Play();
+            switch (currentElement)
+            {
+                case Element.Water:
+                        if(!partSystem.isPlaying)
+                            partSystem.Play();
+                    break;
+                case Element.Fire:
+                    if (!partSystem.isPlaying)
+                        partSystem.Play();
+                    break;
+                case Element.Air:
+                    if(currentAirCooldown == 0f)
+                    {
+                        currentAirCooldown = airCooldown;
+                        partSystem.Play();
+                    }
+                    break;
+                case Element.Earth:
+                    if(currentEarthCooldown == 0f)
+                    {
+                        currentEarthCooldown = earthCooldown;
+                        RaycastHit hit;
+                        if (Physics.Raycast(transform.position, transform.forward, out hit, 5f))
+                        {
+                            GameObject other = hit.collider.gameObject;
+                            if (other.CompareTag("Manipulatable"))
+                                other.SendMessage("OnEarth");
+                        }
+                    }
+                    break;
+            }
         }
         else
         {
-            if (partSystem.isPlaying)
+            if (partSystem != null && partSystem.isPlaying)
+            {
                 partSystem.Stop();
-        }
-
-
-        if (Input.GetKeyUp(KeyCode.Alpha1))
-        {
-            partSystem = fire;
-            currentElement = Element.Fire;
-        }
-        else if (Input.GetKeyUp(KeyCode.Alpha2))
-        {
-            partSystem = air;
-            currentElement = Element.Air;
-        }
-        else if (Input.GetKeyUp(KeyCode.Alpha3))
-        {
-            partSystem = water;
-            currentElement = Element.Water;
-        }
-        else if (Input.GetKeyUp(KeyCode.Alpha4))
-        {
-            partSystem = earth;
-            currentElement = Element.Earth;
+            }
         }
     }
 
@@ -201,10 +232,6 @@ public class PlayerScript : MonoBehaviour
                     other.SendMessage("OnHeat");
                     break;
                 case Element.Air:
-                    if (currentAirCooldown > 0)
-                        break;
-
-                    currentAirCooldown = airCooldown;
                     ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
                     int safeLength = partSystem.GetSafeCollisionEventSize();
                     if (collisionEvents.Length < safeLength)
