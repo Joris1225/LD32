@@ -3,6 +3,22 @@ using System.Collections;
 
 public class PlayerScript : MonoBehaviour 
 {
+    public enum Element
+    {
+        Earth,
+        Air,
+        Fire,
+        Water
+    }
+
+    private Element currentElement;
+    private ParticleSystem partSystem;
+
+    private ParticleSystem air;
+    private ParticleSystem fire;
+    private ParticleSystem earth;
+    private ParticleSystem water;
+
     public bool escapeToggled = false;
 
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -24,7 +40,27 @@ public class PlayerScript : MonoBehaviour
     void Awake()
     {
         motor = GetComponent<CharacterMotor>();
-        
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            switch(child.name)
+            {
+                case "Air":
+                    air = child.GetComponent<ParticleSystem>();
+                    break;
+                case "Earth":
+                    earth = child.GetComponent<ParticleSystem>();
+                    break;
+                case "Fire":
+                    fire = child.GetComponent<ParticleSystem>();
+                    break;
+                case "Water":
+                    water = child.GetComponent<ParticleSystem>();
+                    break;
+            }
+        }
+        partSystem = fire;
+        currentElement = Element.Fire;
     }
 
 	void Start() 
@@ -47,6 +83,8 @@ public class PlayerScript : MonoBehaviour
         }
 
         Move();
+
+        Fire();
 	}
 	
 
@@ -116,5 +154,59 @@ public class PlayerScript : MonoBehaviour
             Cursor.visible = true;
             escapeToggled = true;
         }
+    }
+
+    private void Fire()
+    {
+        if (Input.GetButton("Fire1"))
+        {
+            if (!partSystem.isPlaying)
+                partSystem.Play();
+        }
+        else
+        {
+            if (partSystem.isPlaying)
+                partSystem.Stop();
+        }
+
+
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            partSystem = fire;
+            currentElement = Element.Fire;
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            partSystem = air;
+            currentElement = Element.Air;
+        }
+    }
+
+    void OnParticleCollision(GameObject other)
+    {
+        if(other.CompareTag("Manipulatable"))
+        {
+            switch(currentElement)
+            {
+                case Element.Fire:
+                    Debug.Log("fire");
+                    other.SendMessage("OnHeat");
+                    break;
+                case Element.Air:
+                    Debug.Log("air");
+                    ParticleCollisionEvent[] collisionEvents = new ParticleCollisionEvent[16];
+                    int safeLength = partSystem.GetSafeCollisionEventSize();
+                    if (collisionEvents.Length < safeLength)
+                        collisionEvents = new ParticleCollisionEvent[safeLength];
+                    int numCollisionEvents = partSystem.GetCollisionEvents(other, collisionEvents);
+
+                    for (int i = 0; i < numCollisionEvents; i++)
+                    {
+                        other.SendMessage("OnAir", collisionEvents[i]);
+                    }
+                    break;
+            }
+        }
+        
     }
 }
