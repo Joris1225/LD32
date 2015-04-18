@@ -12,6 +12,7 @@ public class ManipulatableBlock : MonoBehaviour
     private Material mat;
     private Rigidbody rb;
     private ParticleSystem steam;
+    private ParticleSystem earthParticles;
 
     void Awake()
     {
@@ -20,7 +21,19 @@ public class ManipulatableBlock : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        steam = GetComponentInChildren<ParticleSystem>();
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            switch (child.name)
+            {
+                case "Steam":
+                    steam = child.GetComponent<ParticleSystem>();
+                    break;
+                case "Earth":
+                    earthParticles = child.GetComponent<ParticleSystem>();
+                    break;
+            }
+        }
     }
 
 	void Start() 
@@ -61,5 +74,6 @@ public class ManipulatableBlock : MonoBehaviour
     public void OnEarth()
     {
         rb.AddForce(Vector3.up * earthForce, ForceMode.Impulse);
+        earthParticles.Play();
     }
 }
