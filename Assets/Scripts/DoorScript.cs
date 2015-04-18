@@ -6,7 +6,9 @@ public class DoorScript : MonoBehaviour
 
     public float openTime = 10f;
     public float deltaY = 6f;
+    public AudioClip onOpen;
 
+    private AudioSource audioSource;
     private bool shouldOpen = false;
     private Rigidbody rb;
     private float goalPosition;
@@ -14,13 +16,9 @@ public class DoorScript : MonoBehaviour
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
     }
-
-	void Start() 
-	{
-	
-	}
 	
 	void Update() 
 	{
@@ -40,6 +38,7 @@ public class DoorScript : MonoBehaviour
     {
         if(!shouldOpen)
         {
+            audioSource.PlayOneShot(onOpen);
             shouldOpen = true;
             goalPosition = transform.position.y + deltaY;
         }

@@ -7,7 +7,10 @@ public class ManipulatableBlock : MonoBehaviour
     public float coolPace = 0.05f;
     public float airForce = 1f;
     public float earthForce = 10f;
+    public AudioClip collisionSound;
 
+
+    private AudioSource audioSource;
     private float heat = 0f;
     private Material mat;
     private Rigidbody rb;
@@ -16,6 +19,7 @@ public class ManipulatableBlock : MonoBehaviour
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
         Renderer r = GetComponent<Renderer>();
         mat = r.material;
 
@@ -83,5 +87,11 @@ public class ManipulatableBlock : MonoBehaviour
         {
             other.SendMessage("OnSteam");
         }
+    }
+
+    void OnCollisionEnter(Collision col)
+    {
+        audioSource.pitch = Random.Range(0.6f, 1.2f);
+        audioSource.PlayOneShot(collisionSound);
     }
 }

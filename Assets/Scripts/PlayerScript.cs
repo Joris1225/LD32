@@ -116,6 +116,11 @@ public class PlayerScript : MonoBehaviour
         }
 
         Fire();
+
+        if(Input.GetKeyUp(KeyCode.R))
+        {
+            Application.LoadLevel(0);
+        }
 	}
 
     private void LookAround()
