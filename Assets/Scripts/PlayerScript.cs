@@ -71,11 +71,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.GetKey(KeyCode.Escape))
-        {
-            HandleMouseLock();
-        }
+        HandleMouseLock();
 
         if(!escapeToggled)
         {
