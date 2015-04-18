@@ -9,24 +9,26 @@ public class DoorScript : MonoBehaviour
     public AudioClip onOpen;
 
     private AudioSource audioSource;
-    private bool shouldOpen = false;
+    private bool shouldMove = false;
     private Rigidbody rb;
     private float goalPosition;
     private float time;
+    private float originalPosition;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
+        originalPosition = transform.position.y;
     }
 	
 	void Update() 
 	{
-	    if(shouldOpen)
+	    if(shouldMove)
         {
-            if (transform.position.y >= goalPosition)
+            if (transform.position.y == goalPosition)
             {
-                this.enabled = false;
+                shouldMove = false;
                 return;
             }
             rb.MovePosition(new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, goalPosition, time / openTime), transform.position.z));
@@ -36,11 +38,22 @@ public class DoorScript : MonoBehaviour
 
     public void Open()
     {
-        if(!shouldOpen)
+        if (!shouldMove)
         {
+            time = 0f;
             audioSource.PlayOneShot(onOpen);
-            shouldOpen = true;
-            goalPosition = transform.position.y + deltaY;
+            shouldMove = true;
+            goalPosition = originalPosition + deltaY;
+        }
+    }
+
+    public void Close()
+    {
+        if (!shouldMove)
+        {
+            time = 0f;
+            shouldMove = true;
+            goalPosition = originalPosition;
         }
     }
 }

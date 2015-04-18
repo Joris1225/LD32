@@ -3,11 +3,19 @@ using System.Collections;
 
 public class ButtonScript : MonoBehaviour 
 {
-    public string message;
+    public string triggerEnterMessage = string.Empty;
+    public string triggerExitMessage = string.Empty;
     public GameObject receiver;
 
     void OnTriggerEnter(Collider other)
     {
-        receiver.SendMessage(message);
+        if (triggerEnterMessage != string.Empty)
+            receiver.SendMessage(triggerEnterMessage);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (triggerExitMessage != string.Empty)
+            receiver.SendMessage(triggerExitMessage);
     }
 }
