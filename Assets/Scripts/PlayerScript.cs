@@ -253,5 +253,16 @@ public class PlayerScript : MonoBehaviour
                 other.SendMessage("Ascend");
             }
         }
+        else if (other.CompareTag("WaterContainer"))
+        {
+            if(currentElement == Element.Water)
+            {
+                other.SendMessage("Fill");
+            }
+            if(currentElement == Element.Fire)
+            {
+                other.SendMessage("OnHeat");
+            }
+        }
     }
 }
