@@ -10,14 +10,12 @@ public class DoorScript : MonoBehaviour
 
     private AudioSource audioSource;
     private int direction = 0;
-    private Rigidbody rb;
     private float maxY;
     private float originalY;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
-        rb = GetComponent<Rigidbody>();
         originalY = transform.position.y;
         maxY = originalY + deltaY;
     }
@@ -31,7 +29,7 @@ public class DoorScript : MonoBehaviour
             else if (direction == -1 && transform.position.y <= originalY)
                 direction = 0;
             else
-                rb.MovePosition(new Vector3(transform.position.x, transform.position.y + (moveSpeed * direction), transform.position.z));
+                transform.Translate(new Vector3(0f, moveSpeed * direction, 0f));
         }
 	}
 
