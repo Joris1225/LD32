@@ -7,15 +7,19 @@ public class ButtonScript : MonoBehaviour
     public string triggerExitMessage = string.Empty;
     public GameObject receiver;
 
+    private int numObjectsInTrigger = 0;
+
     void OnTriggerEnter(Collider other)
     {
-        if (triggerEnterMessage != string.Empty)
+        if (numObjectsInTrigger == 0 && triggerEnterMessage != string.Empty)
             receiver.SendMessage(triggerEnterMessage);
+        numObjectsInTrigger++;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (triggerExitMessage != string.Empty)
+        numObjectsInTrigger--;
+        if (numObjectsInTrigger == 0 && triggerExitMessage != string.Empty)
             receiver.SendMessage(triggerExitMessage);
     }
 }
