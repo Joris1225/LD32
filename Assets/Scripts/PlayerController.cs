@@ -29,6 +29,23 @@ public class PlayerController : MonoBehaviour
         {
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            if (targetVelocity != Vector3.zero)
+            {
+                // Get the length of the directon vector and then normalize it
+                // Dividing by the length is cheaper than normalizing when we already have the length anyway
+                float directionLength = targetVelocity.magnitude;
+                targetVelocity = targetVelocity / directionLength;
+
+                // Make sure the length is no bigger than 1
+                directionLength = Mathf.Min(1.0f, directionLength);
+
+                // Make the input vector more sensitive towards the extremes and less sensitive in the middle
+                // This makes it easier to control slow speeds when using analog sticks
+                directionLength *= directionLength;
+
+                // Multiply the normalized direction vector by the modified length
+                targetVelocity *= directionLength;
+            }
             targetVelocity = transform.TransformDirection(targetVelocity);
             targetVelocity *= speed;
 
