@@ -189,7 +189,8 @@ public class PlayerScript : MonoBehaviour
                         currentAirCooldown = airCooldown;
                         if (!partSystem.isPlaying)
                             partSystem.Play();
-                        if (Physics.Raycast(transform.position - new Vector3(0f, -1.5f, 0f), transform.forward, 2f))
+                        Ray ray = new Ray(transform.position, transform.forward);
+                        if (Physics.Raycast(ray, 3f))
                         {
                             rb.AddForce(-transform.forward * 10f, ForceMode.Impulse);
                         }
