@@ -21,6 +21,7 @@ public class PlayerScript : MonoBehaviour
     private AudioSource audioSource;
 
     private RectTransform selectedBox;
+    private Rigidbody rb;
 
     public bool escapeToggled = false;
     private bool audioMuted = false;
@@ -47,6 +48,7 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
+        rb = GetComponent<Rigidbody>();
         audioSource = GetComponent<AudioSource>();
 
         for(int i = 0; i < transform.childCount; i++)
@@ -191,9 +193,10 @@ public class PlayerScript : MonoBehaviour
                         currentAirCooldown = airCooldown;
                         if (!partSystem.isPlaying)
                             partSystem.Play();
-                        if (Physics.Raycast(transform.position, transform.forward, 2f))
+                        if (Physics.Raycast(transform.position - new Vector3(0f, -1.5f, 0f), transform.forward, 2f))
                         {
-
+                            rb.AddForce(-transform.forward * 10f, ForceMode.Impulse);
+                            print("hit");
                         }
                     }
                     break;
