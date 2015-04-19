@@ -24,7 +24,6 @@ public class PlayerScript : MonoBehaviour
     private Rigidbody rb;
 
     public bool escapeToggled = false;
-    private bool audioMuted = false;
 
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
     public RotationAxes axes = RotationAxes.MouseXAndY;
@@ -38,7 +37,6 @@ public class PlayerScript : MonoBehaviour
     public float maximumY = 60f;
 
     private float rotationY = 0f;
-    private float moveSpeed = 2f;
 
     private float airCooldown = 1f;
     private float currentAirCooldown = 0f;
@@ -94,8 +92,6 @@ public class PlayerScript : MonoBehaviour
             LookAround();
             Cursor.lockState = CursorLockMode.Locked;
         }
-
-        // Move();
 
         currentAirCooldown = Mathf.Clamp(currentAirCooldown - Time.deltaTime, 0f, airCooldown);
         currentEarthCooldown = Mathf.Clamp(currentEarthCooldown - Time.deltaTime, 0f, earthCooldown);
@@ -196,7 +192,6 @@ public class PlayerScript : MonoBehaviour
                         if (Physics.Raycast(transform.position - new Vector3(0f, -1.5f, 0f), transform.forward, 2f))
                         {
                             rb.AddForce(-transform.forward * 10f, ForceMode.Impulse);
-                            print("hit");
                         }
                     }
                     break;
