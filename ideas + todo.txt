@@ -6,3 +6,6 @@ Use steam to open door
 Move block to pressure plate
 Throw block into `Basketball ring`
 Hot Air balloon
+
+TODO:
+Redo element icons
