@@ -4,56 +4,44 @@ using System.Collections;
 public class DoorScript : MonoBehaviour 
 {
 
-    public float openTime = 10f;
+    public float moveSpeed = 0.1f;
     public float deltaY = 6f;
     public AudioClip onOpen;
 
     private AudioSource audioSource;
-    private bool shouldMove = false;
+    private int direction = 0;
     private Rigidbody rb;
-    private float goalPosition;
-    private float time;
-    private float originalPosition;
+    private float maxY;
+    private float originalY;
 
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
         rb = GetComponent<Rigidbody>();
-        originalPosition = transform.position.y;
+        originalY = transform.position.y;
+        maxY = originalY + deltaY;
     }
 	
-	void Update() 
+	void FixedUpdate() 
 	{
-	    if(shouldMove)
+	    if(direction != 0)
         {
-            if (transform.position.y == goalPosition)
-            {
-                shouldMove = false;
-                return;
-            }
-            rb.MovePosition(new Vector3(transform.position.x, Mathf.Lerp(transform.position.y, goalPosition, time / openTime), transform.position.z));
-            time += Time.deltaTime;
+            if (direction == 1 && transform.position.y >= maxY)
+                direction = 0;
+            else if (direction == -1 && transform.position.y <= originalY)
+                direction = 0;
+            else
+                rb.MovePosition(new Vector3(transform.position.x, transform.position.y + (moveSpeed * direction), transform.position.z));
         }
 	}
 
     public void Open()
     {
-        if (!shouldMove)
-        {
-            time = 0f;
-            audioSource.PlayOneShot(onOpen);
-            shouldMove = true;
-            goalPosition = originalPosition + deltaY;
-        }
+        direction = 1;
     }
 
     public void Close()
     {
-        if (!shouldMove)
-        {
-            time = 0f;
-            shouldMove = true;
-            goalPosition = originalPosition;
-        }
+        direction = -1;   
     }
 }
