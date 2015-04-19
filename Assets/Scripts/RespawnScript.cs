@@ -14,8 +14,14 @@ public class RespawnScript : MonoBehaviour
 
     public void Respawn()
     {
+        transform.rotation = Quaternion.identity;
         transform.position = spawnPosition;
-        if(rb != null)
+        if (rb != null)
+        {
             rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        
+
     }
 }
