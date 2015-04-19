@@ -18,9 +18,12 @@ public class PlayerScript : MonoBehaviour
     private ParticleSystem fire;
     private ParticleSystem water;
 
+    private AudioSource audioSource;
+
     private RectTransform selectedBox;
 
     public bool escapeToggled = false;
+    private bool audioMuted = false;
 
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
     public RotationAxes axes = RotationAxes.MouseXAndY;
@@ -46,6 +49,8 @@ public class PlayerScript : MonoBehaviour
 
     void Awake()
     {
+        audioSource = GetComponent<AudioSource>();
+
         motor = GetComponent<CharacterMotor>();
         for(int i = 0; i < transform.childCount; i++)
         {
@@ -77,12 +82,18 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
+        if(Input.GetKeyUp(KeyCode.M))
+        {
+            audioSource.mute = !audioSource.mute;
+        }
+
         if (Input.GetKeyDown(KeyCode.Escape))
             HandleMouseLock();
 
         if(!escapeToggled)
         {
             LookAround();
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         Move();
