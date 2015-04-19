@@ -36,7 +36,8 @@ public class DoorScript : MonoBehaviour
     public void Open()
     {
         direction = 1;
-        audioSource.PlayOneShot(onOpen);
+        if (!audioSource.isPlaying)
+            audioSource.PlayOneShot(onOpen);
     }
 
     public void Close()
