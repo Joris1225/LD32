@@ -45,13 +45,10 @@ public class PlayerScript : MonoBehaviour
     private float earthCooldown = 2f;
     private float currentEarthCooldown = 0f;
 
-    private CharacterMotor motor;
-
     void Awake()
     {
         audioSource = GetComponent<AudioSource>();
 
-        motor = GetComponent<CharacterMotor>();
         for(int i = 0; i < transform.childCount; i++)
         {
             Transform child = transform.GetChild(i);
@@ -96,7 +93,7 @@ public class PlayerScript : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
         }
 
-        Move();
+        // Move();
 
         currentAirCooldown = Mathf.Clamp(currentAirCooldown - Time.deltaTime, 0f, airCooldown);
         currentEarthCooldown = Mathf.Clamp(currentEarthCooldown - Time.deltaTime, 0f, earthCooldown);
@@ -158,34 +155,6 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    private void Move()
-    {
-        // Get the input vector from kayboard or analog stick
-        Vector3 directionVector = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
-        if (directionVector != Vector3.zero)
-        {
-            // Get the length of the directon vector and then normalize it
-            // Dividing by the length is cheaper than normalizing when we already have the length anyway
-            float directionLength = directionVector.magnitude;
-            directionVector = directionVector / directionLength;
-
-            // Make sure the length is no bigger than 1
-            directionLength = Mathf.Min(1.0f, directionLength);
-
-            // Make the input vector more sensitive towards the extremes and less sensitive in the middle
-            // This makes it easier to control slow speeds when using analog sticks
-            directionLength *= directionLength;
-
-            // Multiply the normalized direction vector by the modified length
-            directionVector *= directionLength;
-        }
-
-        // Apply the direction to the CharacterMotor
-        motor.inputMoveDirection = transform.rotation * directionVector * moveSpeed;
-        motor.inputJump = Input.GetButton("Jump");
-    }
-
     private void HandleMouseLock()
     {
         if (escapeToggled)
@@ -222,6 +191,10 @@ public class PlayerScript : MonoBehaviour
                         currentAirCooldown = airCooldown;
                         if (!partSystem.isPlaying)
                             partSystem.Play();
+                        if (Physics.Raycast(transform.position, transform.forward, 2f))
+                        {
+
+                        }
                     }
                     break;
                 case Element.Earth:
