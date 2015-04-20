@@ -7,6 +7,14 @@ public class WaterContainerScript : MonoBehaviour
     public float fillRate = 0.05f;
     private GameObject water;
     private ParticleSystem partSystem;
+    private float minWater;
+    public float WaterLevel
+    {
+        get
+        {
+            return (water.transform.localPosition.y - minWater) / (maxHeight * 2);
+        }
+    }
 
     void Awake()
     {
@@ -22,6 +30,7 @@ public class WaterContainerScript : MonoBehaviour
                 partSystem = child.GetComponent<ParticleSystem>();
             }
         }
+        minWater = water.transform.localPosition.y;
     }
 
 
